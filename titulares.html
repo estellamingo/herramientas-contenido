@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Generador de titulares</title>
+<title>Daedalus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
@@ -78,6 +78,24 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
 .caseControls{margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
 .casePreviewHint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px}
 </style>
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daedalus">
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+
+
+<style>
+@media (max-width: 768px){
+  header a, .topbar a, .nav a, .nav-button, .back-link {
+    font-size: 110% !important;
+    min-height: 48px !important;
+  }
+}
+</style>
+
 </head>
 <body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de titulares</span><a href="comunicado.html">Ir a comunicados</a></nav>
 <header><div><strong>Generador de piezas</strong></div><span>1:1 · 9:16 · 4:5</span></header>
@@ -236,5 +254,14 @@ $('downloadAll').onclick=async()=>{const btn=$('downloadAll'),oldText=btn.textCo
 function counts(){for(const id of ['title','subtitle','bullet1','bullet2'])$(id+'Count').textContent=$(id).value.length+' caracteres'}
 document.fonts.ready.then(render);counts();syncSliders();syncCaseSliders();
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
+</script>
+
 </body>
 </html>

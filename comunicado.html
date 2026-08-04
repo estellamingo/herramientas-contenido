@@ -3,7 +3,7 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Generador de comunicados</title>
+<title>Daedalus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/styles.css"><style>
@@ -18,7 +18,25 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 .stage{border-radius:0;background:#1a1e25;padding:20px;min-height:calc(100vh - 52px)}
 .startup-status{background:#20242c;color:var(--suite-muted)}
 @media(max-width:900px){.app{grid-template-columns:1fr}.panel{position:static;height:auto;border-right:0;border-bottom:1px solid var(--suite-line)}.stage{min-height:auto}}
-</style></head><body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de comunicados</span><a href="titulares.html">Ir a titulares</a></nav>
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daedalus">
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+
+
+<style>
+@media (max-width: 768px){
+  header a, .topbar a, .nav a, .nav-button, .back-link {
+    font-size: 110% !important;
+    min-height: 48px !important;
+  }
+}
+</style>
+
+</head><body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de comunicados</span><a href="titulares.html">Ir a titulares</a></nav>
 <main class="app"><aside class="panel"><h1>Generador de comunicados</h1>
 <label>Plantilla</label><select id="templateSelect"></select>
 <label>Cuerpo</label><textarea id="bodyInput"></textarea>
@@ -57,4 +75,13 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
   window.addEventListener('load',()=>setTimeout(fitArtboard,100));
   fitArtboard();
 })();
-</script></body></html>
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
+</script>
+
+</body></html>

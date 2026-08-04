@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Herramientas de contenido</title>
+<title>Daedalus</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&family=Raleway:wght@400;800;900&display=swap" rel="stylesheet">
@@ -29,12 +29,29 @@
 }
 </style>
 
+
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Daedalus">
+<link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+
 </head>
 <body>
-<header class="top"><div class="brand"><div><strong>Herramientas de contenido</strong></div></div></header>
+<header class="top"><div class="brand"><div><strong>Daedalus</strong></div></div></header>
 <main class="wrap"><section class="hero"><div class="eyebrow">Suite institucional</div><h1>Elige la pieza que necesitas crear.</h1><p>Dos herramientas institucionales reunidas en una misma plataforma.</p></section>
 <section class="grid">
 <a class="card" href="comunicado.html" style="--glow:#5062df;--icon:#293170"><div class="icon">C</div><h2>Generador de comunicados</h2><p>Crea la pieza institucional de comunicados.</p><div class="go">Abrir comunicados →</div></a>
 <a class="card" href="titulares.html" style="--glow:#e5002b;--icon:#e5002b"><div class="icon">T</div><h2>Generador de titulares</h2><p>Crea tres piezas para redes en 1:1, 9:16 y 4:5.</p><div class="go">Abrir titulares →</div></a>
 </section></main>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
+  });
+}
+</script>
+
 </body></html>
