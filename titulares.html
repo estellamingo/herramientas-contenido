@@ -4,9 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Daedalus</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0f1115;--panel:#171a20;--panel2:#20242c;--line:#303641;--text:#f3f5f7;--muted:#9ca6b4;--accent:#e5002b}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Montserrat,system-ui,-apple-system,Segoe UI,sans-serif}
@@ -174,8 +171,7 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
   </div>
 </main>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script src="./assets/vendor/jszip.min.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const canvas=$('canvas'),ctx=canvas.getContext('2d');
@@ -242,7 +238,27 @@ $('resetCrop').onclick=()=>{crops[current]={z:1,x:0,y:0};syncSliders();render()}
 $('imageFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const status=$('imageStatus');status.textContent='Cargando imagen…';const reader=new FileReader();reader.onerror=()=>status.textContent='No pude leer el archivo.';reader.onload=()=>{const next=new Image();next.onload=()=>{img=next;imageReady=true;Object.keys(crops).forEach(k=>crops[k]={z:1,x:0,y:0});syncSliders();render();status.textContent=`Imagen cargada: ${file.name}`};next.onerror=()=>{status.textContent='El navegador no puede abrir esta imagen. Usa JPG, PNG o WebP; HEIC no suele ser compatible.'};next.src=reader.result};reader.readAsDataURL(file)};
 $('logoFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const status=$('logoStatus');status.textContent='Cargando logo…';const reader=new FileReader();reader.onload=()=>{const next=new Image();next.onload=()=>{logoImg=next;logoReady=true;render();status.textContent=`Logo cargado: ${file.name}`};next.onerror=()=>status.textContent='No pude abrir el logo. Usa SVG o PNG transparente.';next.src=reader.result};reader.onerror=()=>status.textContent='No pude leer el archivo del logo.';reader.readAsDataURL(file)};
 $('txtFile').onchange=async e=>{const f=e.target.files[0];if(f)$('source').value=await f.text()};
-$('docxFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const ab=await f.arrayBuffer();const result=await mammoth.extractRawText({arrayBuffer:ab});$('source').value=result.value;$('extractStatus').textContent='Word leído correctamente.'}catch(err){$('extractStatus').textContent='No pude leer el Word. Prueba guardándolo como DOCX o TXT.'}};
+$('docxFile').onchange=async e=>{
+  const f=e.target.files[0]; if(!f)return;
+  try{
+    if(typeof JSZip==='undefined') throw new Error('JSZip no disponible');
+    const zip=await JSZip.loadAsync(await f.arrayBuffer());
+    const xmlFile=zip.file('word/document.xml');
+    if(!xmlFile) throw new Error('Documento Word no válido');
+    const xml=await xmlFile.async('string');
+    const doc=new DOMParser().parseFromString(xml,'application/xml');
+    const paragraphs=[...doc.getElementsByTagNameNS('*','p')].map(p=>{
+      const parts=[...p.getElementsByTagNameNS('*','t')].map(n=>n.textContent||'');
+      return parts.join('');
+    }).filter(Boolean);
+    $('source').value=paragraphs.join('
+');
+    $('extractStatus').textContent='Word leído correctamente.';
+  }catch(err){
+    console.error(err);
+    $('extractStatus').textContent='No pude leer el Word. Prueba guardándolo como DOCX o TXT.';
+  }
+};
 function sentences(t){return t.replace(/\r/g,' ').split(/(?<=[.!?])\s+|\n+/).map(s=>s.trim()).filter(s=>s.length>20)}
 $('extract').onclick=()=>{const raw=$('source').value.trim();if(!raw){$('extractStatus').textContent='Primero pega o carga un comunicado.';return}const lines=raw.split(/\n+/).map(x=>x.trim()).filter(Boolean);const ss=sentences(raw);const first=lines[0]||ss[0]||'';$('title').value=first.slice(0,135);$('subtitle').value=(lines[1]||ss[1]||'').slice(0,150);$('bullet1').value=(ss[2]||lines[2]||'').slice(0,220);$('bullet2').value=(ss[3]||lines[3]||'').slice(0,220);const prov=raw.match(/\b(Azuay|Bolívar|Cañar|Carchi|Chimborazo|Cotopaxi|El Oro|Esmeraldas|Galápagos|Guayas|Imbabura|Loja|Los Ríos|Manabí|Morona Santiago|Napo|Orellana|Pastaza|Pichincha|Santa Elena|Santo Domingo|Sucumbíos|Tungurahua|Zamora Chinchipe)\b/i);if(prov)$('place').value=prov[0].replace(/\b\w/g,m=>m.toUpperCase());$('extractStatus').textContent='Contenido propuesto. Revísalo antes de exportar.';counts();render()};
 function filename(fmt){return `FGE_${fmt}_${new Date().toISOString().slice(0,10)}.png`}
