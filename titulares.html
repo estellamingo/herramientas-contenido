@@ -251,8 +251,7 @@ $('docxFile').onchange=async e=>{
       const parts=[...p.getElementsByTagNameNS('*','t')].map(n=>n.textContent||'');
       return parts.join('');
     }).filter(Boolean);
-    $('source').value=paragraphs.join('
-');
+    $('source').value=paragraphs.join('\\n');
     $('extractStatus').textContent='Word leído correctamente.';
   }catch(err){
     console.error(err);
