@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "9.1.0",
-  "cache": "daedalus-v9-1-20260804",
+  "version": "9.2.0",
+  "cache": "daedalus-v9-2-20260804",
   "offline": true,
-  "fix": "Corrección del render del generador de piezas en escritorio"
+  "fix": "Carga explícita de Montserrat y render posterior a document.fonts"
 }

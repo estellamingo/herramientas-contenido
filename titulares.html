@@ -93,6 +93,7 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
 }
 </style>
 
+<link rel="stylesheet" href="./css/fonts.css">
 </head>
 <body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de titulares</span><a href="comunicado.html">Ir a comunicados</a></nav>
 <header><div><strong>Generador de piezas</strong></div><span>1:1 · 9:16 · 4:5</span></header>
@@ -263,11 +264,38 @@ $('extract').onclick=()=>{const raw=$('source').value.trim();if(!raw){$('extract
 function filename(fmt){return `FGE_${fmt}_${new Date().toISOString().slice(0,10)}.png`}
 function canvasBlob(){return new Promise((resolve,reject)=>{try{canvas.toBlob(blob=>blob?resolve(blob):reject(new Error('El navegador no pudo crear el PNG.')),'image/png',1)}catch(err){reject(err)}})}
 function downloadBlob(blob,name){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
-async function renderForExport(fmt){current=fmt;render();if(document.fonts&&document.fonts.ready)await document.fonts.ready;await new Promise(requestAnimationFrame);await new Promise(requestAnimationFrame);return await canvasBlob()}
+async function renderForExport(fmt){
+  current=fmt;
+  if(document.fonts){
+    await Promise.all([
+      document.fonts.load('400 35px Montserrat'),
+      document.fonts.load('700 40px Montserrat'),
+      document.fonts.load('800 55px Montserrat')
+    ]);
+    await document.fonts.ready;
+  }
+  render();
+  await new Promise(requestAnimationFrame);
+  await new Promise(requestAnimationFrame);
+  return await canvasBlob();
+}
 $('download').onclick=async()=>{const btn=$('download');const oldText=btn.textContent;btn.disabled=true;btn.textContent='Preparando PNG…';$('renderStatus').textContent='Generando archivo…';try{const blob=await renderForExport(current);downloadBlob(blob,filename(current));$('renderStatus').textContent='PNG exportado correctamente.'}catch(err){console.error(err);$('renderStatus').textContent='No se pudo exportar. Abre el archivo en Chrome y vuelve a intentarlo.';alert('Error al exportar: '+(err.message||err))}finally{btn.disabled=false;btn.textContent=oldText}}
 $('downloadAll').onclick=async()=>{const btn=$('downloadAll'),oldText=btn.textContent,old=current;btn.disabled=true;btn.textContent='Preparando…';$('renderStatus').textContent='Generando formatos…';try{const blobs=[];for(const fmt of ['square','story','portrait']){blobs.push(new File([await renderForExport(fmt)],filename(fmt),{type:'image/png'}))}if(navigator.share&&navigator.canShare&&navigator.canShare({files:blobs})){await navigator.share({files:blobs,title:'Titulares exportados'});$('renderStatus').textContent='Archivos listos para compartir.';}else{if(typeof JSZip==='undefined')throw new Error('No se cargó el módulo ZIP.');const zip=new JSZip();for(const f of blobs){zip.file(f.name,f)}const pack=await zip.generateAsync({type:'blob'});downloadBlob(pack,`FGE_3_formatos_${new Date().toISOString().slice(0,10)}.zip`);$('renderStatus').textContent='ZIP exportado correctamente.';}}catch(err){console.error(err);$('renderStatus').textContent='No se pudo exportar.';}finally{current=old;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.format===current));syncSliders();render();btn.disabled=false;btn.textContent=oldText}};
 function counts(){for(const id of ['title','subtitle','bullet1','bullet2'])$(id+'Count').textContent=$(id).value.length+' caracteres'}
-document.fonts.ready.then(render);counts();syncSliders();syncCaseSliders();
+async function initializeFontsAndRender(){
+  try{
+    if(document.fonts){
+      await Promise.all([
+        document.fonts.load('400 35px Montserrat'),
+        document.fonts.load('700 40px Montserrat'),
+        document.fonts.load('800 55px Montserrat')
+      ]);
+      await document.fonts.ready;
+    }
+  }catch(err){console.warn('No se pudieron precargar todas las fuentes.',err)}
+  render();
+}
+counts();syncSliders();syncCaseSliders();initializeFontsAndRender();
 </script>
 
 <script>

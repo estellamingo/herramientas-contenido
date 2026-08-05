@@ -1,4 +1,4 @@
-const CACHE_NAME='daedalus-v9-1-20260804';
+const CACHE_NAME='daedalus-v9-2-20260804';
 const APP_SHELL=[
   "./README_PWA.md",
   "./assets/fonts/Montserrat-Bold.otf",
