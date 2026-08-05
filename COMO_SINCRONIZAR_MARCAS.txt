@@ -1,0 +1,12 @@
+CÓMO ACTUALIZAR LA BIBLIOTECA
+
+1. En GitHub entra a assets/marcas.
+2. Sube los PNG nuevos y confirma con Commit changes.
+3. Espera a que GitHub Pages termine de publicar.
+4. Abre Daedalus con internet.
+5. En Caso emblemático pulsa “Actualizar biblioteca”.
+6. Daedalus descargará todos los PNG y los guardará en el dispositivo.
+7. Después podrás utilizarlos incluso sin internet.
+
+No es necesario editar catalogo.json, TXT ni ningún otro archivo.
+La opción de cargar un PNG temporal sigue disponible.

@@ -76,6 +76,13 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
 .casePreviewHint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:8px}
 
 /* Biblioteca de marcas V10 */
+
+.brandSyncRow{display:grid;grid-template-columns:1fr;gap:7px;margin:10px 0 4px}
+.brandSyncButton{min-height:42px;border:1px solid var(--line);border-radius:8px;background:#20252e;color:#fff;font-weight:800;cursor:pointer}
+.brandSyncButton:hover{background:#2a303b}
+.brandSyncButton:disabled{opacity:.6;cursor:wait}
+.brandSyncMeta{font-size:10px;line-height:1.4;color:var(--muted)}
+
 .brandLibrary{margin-top:12px}
 .brandSearch{margin-bottom:10px}
 .brandGroupTitle{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;font-size:11px;color:#c8ced7}
@@ -134,6 +141,10 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
       <div class="brandLibrary">
         <label for="brandSearch">Buscar en la biblioteca</label>
         <input id="brandSearch" class="brandSearch" type="text" placeholder="Escribe el nombre del caso…">
+        <div class="brandSyncRow">
+          <button id="syncBrands" class="brandSyncButton" type="button">Actualizar biblioteca</button>
+          <div id="brandSyncMeta" class="brandSyncMeta">Usa este botón después de subir nuevos PNG a GitHub.</div>
+        </div>
         <div id="recentBrandsWrap" class="hidden">
           <div class="brandGroupTitle"><span>Recientes</span></div>
           <div id="recentBrands" class="brandGrid recents"></div>
@@ -251,8 +262,65 @@ function syncCaseSliders(){const t=caseTransforms[current];$('caseScale').value=
 const BRAND_CATALOG_URL='./assets/marcas/catalogo.json';
 const BRAND_BASE_URL='./assets/marcas/';
 const RECENT_BRANDS_KEY='daedalus_recent_brands_v10';
+const BRAND_SYNC_DATE_KEY='daedalus_brand_sync_date_v103';
+const GITHUB_BRANDS_API='https://api.github.com/repos/estellamingo/herramientas-contenido/contents/assets/marcas?ref=main';
+const BRAND_DB_NAME='daedalus-brand-library';
+const BRAND_DB_STORE='brands';
+let brandObjectUrls=new Map();
 
-function normalizedBrandId(item){return String(item.archivo||item.nombre||'').toLowerCase()}
+function openBrandDb(){
+  return new Promise((resolve,reject)=>{
+    const request=indexedDB.open(BRAND_DB_NAME,1);
+    request.onupgradeneeded=()=>{
+      const db=request.result;
+      if(!db.objectStoreNames.contains(BRAND_DB_STORE)){
+        db.createObjectStore(BRAND_DB_STORE,{keyPath:'id'});
+      }
+    };
+    request.onsuccess=()=>resolve(request.result);
+    request.onerror=()=>reject(request.error);
+  });
+}
+async function brandDbGetAll(){
+  const db=await openBrandDb();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BRAND_DB_STORE,'readonly');
+    const request=tx.objectStore(BRAND_DB_STORE).getAll();
+    request.onsuccess=()=>resolve(request.result||[]);
+    request.onerror=()=>reject(request.error);
+    tx.oncomplete=()=>db.close();
+  });
+}
+async function brandDbGet(id){
+  const db=await openBrandDb();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BRAND_DB_STORE,'readonly');
+    const request=tx.objectStore(BRAND_DB_STORE).get(id);
+    request.onsuccess=()=>resolve(request.result||null);
+    request.onerror=()=>reject(request.error);
+    tx.oncomplete=()=>db.close();
+  });
+}
+async function brandDbReplaceAll(records){
+  const db=await openBrandDb();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(BRAND_DB_STORE,'readwrite');
+    const store=tx.objectStore(BRAND_DB_STORE);
+    store.clear();
+    records.forEach(record=>store.put(record));
+    tx.oncomplete=()=>{db.close();resolve()};
+    tx.onerror=()=>{db.close();reject(tx.error)};
+    tx.onabort=()=>{db.close();reject(tx.error)};
+  });
+}
+function filenameToBrandName(filename){
+  const stem=String(filename||'').replace(/\.png$/i,'').replace(/[-_]+/g,' ').trim();
+  return stem.split(/\s+/).map(word=>{
+    if(word.toUpperCase()===word&&word.length<=5)return word;
+    return word.charAt(0).toLocaleUpperCase('es')+word.slice(1);
+  }).join(' ');
+}
+function normalizedBrandId(item){return String(item.id||item.archivo||item.nombre||'').toLowerCase()}
 function getRecentBrandIds(){
   try{return JSON.parse(localStorage.getItem(RECENT_BRANDS_KEY)||'[]')}catch(e){return[]}
 }
@@ -262,14 +330,28 @@ function saveRecentBrand(item){
   try{localStorage.setItem(RECENT_BRANDS_KEY,JSON.stringify(next))}catch(e){}
   renderRecentBrands();
 }
+async function getBrandSource(item){
+  if(item.source==='indexeddb'){
+    const id=normalizedBrandId(item);
+    if(brandObjectUrls.has(id))return brandObjectUrls.get(id);
+    const record=await brandDbGet(id);
+    if(record&&record.blob){
+      const url=URL.createObjectURL(record.blob);
+      brandObjectUrls.set(id,url);
+      return url;
+    }
+  }
+  return BRAND_BASE_URL+encodeURIComponent(item.archivo);
+}
 function brandCard(item){
   const btn=document.createElement('button');
   btn.type='button';
   btn.className='brandCard'+(selectedBrandId===normalizedBrandId(item)?' active':'');
   btn.dataset.brand=normalizedBrandId(item);
   const image=document.createElement('img');
-  image.src=BRAND_BASE_URL+encodeURIComponent(item.archivo);
   image.alt=item.nombre||'Marca';
+  image.src='';
+  getBrandSource(item).then(src=>{image.src=src}).catch(()=>{});
   const label=document.createElement('span');
   label.textContent=item.nombre||item.archivo;
   btn.append(image,label);
@@ -309,22 +391,99 @@ function loadCaseLogoSource(src,statusText,brandId=''){
   next.onerror=()=>{if(status)status.textContent='No pude abrir la marca seleccionada.'};
   next.src=src;
 }
-function selectLibraryBrand(item){
-  saveRecentBrand(item);
-  loadCaseLogoSource(BRAND_BASE_URL+encodeURIComponent(item.archivo),`Marca seleccionada: ${item.nombre}`,normalizedBrandId(item));
+async function selectLibraryBrand(item){
+  try{
+    saveRecentBrand(item);
+    const src=await getBrandSource(item);
+    loadCaseLogoSource(src,`Marca seleccionada: ${item.nombre}`,normalizedBrandId(item));
+  }catch(err){
+    console.error(err);
+    $('caseLogoStatus').textContent='No pude abrir la marca seleccionada.';
+  }
+}
+function updateBrandSyncMeta(){
+  const meta=$('brandSyncMeta');
+  if(!meta)return;
+  const value=localStorage.getItem(BRAND_SYNC_DATE_KEY);
+  meta.textContent=value
+    ? `Última actualización: ${new Date(value).toLocaleString('es-EC')}.`
+    : 'Usa este botón después de subir nuevos PNG a GitHub.';
 }
 async function loadBrandCatalog(){
   const grid=$('brandGrid');
   try{
-    const response=await fetch(BRAND_CATALOG_URL,{cache:'no-cache'});
-    if(!response.ok)throw new Error('No se pudo abrir el catálogo');
-    const data=await response.json();
-    brandCatalog=Array.isArray(data)?data.filter(x=>x&&x.archivo):[];
+    const stored=await brandDbGetAll();
+    if(stored.length){
+      brandCatalog=stored.map(record=>({
+        id:record.id,
+        nombre:record.nombre,
+        archivo:record.archivo,
+        source:'indexeddb'
+      }));
+    }else{
+      const response=await fetch(BRAND_CATALOG_URL,{cache:'no-cache'});
+      if(!response.ok)throw new Error('No se pudo abrir el catálogo incluido');
+      const data=await response.json();
+      brandCatalog=(Array.isArray(data)?data:[])
+        .filter(x=>x&&x.archivo)
+        .map(item=>({...item,id:String(item.archivo).toLowerCase(),source:'static'}));
+    }
     brandCatalog.sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'','es',{sensitivity:'base'}));
-    renderBrandGrid();renderRecentBrands();
+    renderBrandGrid();renderRecentBrands();updateBrandSyncMeta();
   }catch(err){
     console.error(err);
-    if(grid)grid.innerHTML='<div class="brandEmpty">No se pudo cargar la biblioteca. Comprueba que la carpeta assets/marcas esté publicada.</div>';
+    if(grid)grid.innerHTML='<div class="brandEmpty">No se pudo cargar la biblioteca.</div>';
+  }
+}
+async function syncBrandLibrary(){
+  const button=$('syncBrands'),meta=$('brandSyncMeta');
+  button.disabled=true;
+  button.textContent='Actualizando…';
+  meta.textContent='Consultando GitHub…';
+  try{
+    const response=await fetch(GITHUB_BRANDS_API,{
+      headers:{'Accept':'application/vnd.github+json'},
+      cache:'no-store'
+    });
+    if(!response.ok)throw new Error(`GitHub respondió ${response.status}`);
+    const files=(await response.json())
+      .filter(item=>item.type==='file'&&/\.png$/i.test(item.name)&&item.download_url);
+    if(!files.length)throw new Error('No se encontraron PNG en assets/marcas');
+
+    const records=[];
+    for(let index=0;index<files.length;index++){
+      const file=files[index];
+      meta.textContent=`Descargando ${index+1} de ${files.length}: ${file.name}`;
+      const imageResponse=await fetch(file.download_url,{cache:'no-store'});
+      if(!imageResponse.ok)throw new Error(`No se pudo descargar ${file.name}`);
+      const blob=await imageResponse.blob();
+      records.push({
+        id:file.name.toLowerCase(),
+        archivo:file.name,
+        nombre:filenameToBrandName(file.name),
+        sha:file.sha||'',
+        blob
+      });
+    }
+
+    brandObjectUrls.forEach(url=>URL.revokeObjectURL(url));
+    brandObjectUrls.clear();
+    await brandDbReplaceAll(records);
+    localStorage.setItem(BRAND_SYNC_DATE_KEY,new Date().toISOString());
+    brandCatalog=records.map(record=>({
+      id:record.id,
+      archivo:record.archivo,
+      nombre:record.nombre,
+      source:'indexeddb'
+    })).sort((a,b)=>a.nombre.localeCompare(b.nombre,'es',{sensitivity:'base'}));
+    renderBrandGrid();renderRecentBrands();updateBrandSyncMeta();
+    meta.textContent=`Biblioteca actualizada: ${records.length} marcas.`;
+  }catch(err){
+    console.error(err);
+    meta.textContent=`No se pudo actualizar: ${err.message||err}`;
+  }finally{
+    button.disabled=false;
+    button.textContent='Actualizar biblioteca';
   }
 }
 
@@ -383,6 +542,7 @@ async function initializeFontsAndRender(){
   render();
 }
 $('brandSearch').addEventListener('input',renderBrandGrid);
+$('syncBrands').addEventListener('click',syncBrandLibrary);
 counts();syncSliders();syncCaseSliders();loadBrandCatalog();initializeFontsAndRender();
 </script>
 

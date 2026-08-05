@@ -1,6 +1,5 @@
-const CACHE_NAME='daedalus-v10-2-20260805';
+const CACHE_NAME='daedalus-v10-3-20260805';
 const APP_SHELL=[
-  "./.github/workflows/actualizar-catalogo.yml",
   "./README_PWA.md",
   "./README_V10.md",
   "./README_V10_1.md",
@@ -44,7 +43,6 @@ const APP_SHELL=[
   "./js/parser.js",
   "./js/templateStore.js",
   "./manifest.webmanifest",
-  "./scripts/generar_catalogo.py",
   "./titulares.html",
   "./version.json"
 ];
