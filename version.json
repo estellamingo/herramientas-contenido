@@ -1,7 +1,12 @@
 {
   "app": "Daedalus",
-  "version": "9.2.0",
-  "cache": "daedalus-v9-2-20260804",
+  "version": "10.0.0",
+  "cache": "daedalus-v10-20260805",
   "offline": true,
-  "fix": "Carga explícita de Montserrat y render posterior a document.fonts"
+  "features": [
+    "Biblioteca de marcas desde GitHub",
+    "Búsqueda y recientes",
+    "Carga temporal de PNG",
+    "Eliminación del texto de referencia"
+  ]
 }
