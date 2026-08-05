@@ -1,4 +1,12 @@
 {
-  "version": "10.4.0",
-  "change": "Indicador fijo de 3 puntos. Selector eliminado."
+  "app": "Daedalus",
+  "version": "10.4.1",
+  "cache": "daedalus-v10-4-1-20260805",
+  "offline": true,
+  "changes": [
+    "Indicador fijo de tres puntos",
+    "Selector eliminado",
+    "Referencias JavaScript eliminadas",
+    "Biblioteca de V10.3 conservada"
+  ]
 }
