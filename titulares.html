@@ -162,7 +162,7 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
     <label>Bajada <span id="subtitleCount" class="counter"></span></label><textarea id="subtitle">habrían transportado y acopiado más de una tonelada de cocaína</textarea>
     <label>Bullet 1 <span id="bullet1Count" class="counter"></span></label><textarea id="bullet1">Los hechos fueron investigados a partir de un operativo coordinado.</textarea>
     <label>Bullet 2 <span id="bullet2Count" class="counter"></span></label><textarea id="bullet2">Fiscalía presentó elementos de convicción ante el juez competente.</textarea>
-    <label>Número de puntos del indicador</label><select id="dots"><option>3</option><option>4</option><option>5</option><option>6</option></select>
+    
   </section>
 
   <section class="section">
@@ -253,7 +253,7 @@ function drawLogo(){const targetW=210,bottom=70,right=70;if(logoReady){const b=g
 function render(){const f=formats[current];canvas.width=f.w;canvas.height=f.h;if(imageReady)drawCover(img,f.w,f.h,crops[current]);overlay(f.w,f.h);blockOverlay(f);if(current==='portrait')gradient45();
  const margin=70,maxW=f.w-140;ctx.fillStyle='#fff';if(identificationMode==='case'){drawCaseLogo(f)}else{pin(f.placeX,f.placeY-32,34);ctx.font='700 40px Montserrat,Arial';ctx.textBaseline='alphabetic';ctx.fillText($('place').value||'Lugar',f.placeX+53,f.placeY);}
  let title=($('title').value||'Titular').trim();if(current==='portrait')title=title.toUpperCase();ctx.font=`800 ${f.titleSize}px Montserrat,Arial`;const titleLines=fitLines(title,maxW,ctx.font,4);ctx.textBaseline='top';titleLines.forEach((ln,i)=>ctx.fillText(ln,margin,f.titleY+i*f.titleLeading));
- const subY=f.titleY+titleLines.length*f.titleLeading+8;ctx.font=`400 ${f.subtitleSize}px Montserrat,Arial`;const subLines=fitLines($('subtitle').value,maxW,ctx.font,3);subLines.forEach((ln,i)=>ctx.fillText(ln,margin,subY+i*44));const indY=subY+subLines.length*44+22;drawIndicator(margin,indY,Number($('dots').value));
+ const subY=f.titleY+titleLines.length*f.titleLeading+8;ctx.font=`400 ${f.subtitleSize}px Montserrat,Arial`;const subLines=fitLines($('subtitle').value,maxW,ctx.font,3);subLines.forEach((ln,i)=>ctx.fillText(ln,margin,subY+i*44));const indY=subY+subLines.length*44+22;drawIndicator(margin,indY,3);
  if(current==='portrait'){const mainBlockBottom=(f.titleY-80)+410;let y=Math.max(indY+120,mainBlockBottom+55);ctx.font='400 30px Montserrat,Arial';for(const text of [$('bullet1').value,$('bullet2').value]){ctx.beginPath();ctx.moveTo(margin,y+8);ctx.lineTo(margin+14,y+16);ctx.lineTo(margin,y+24);ctx.closePath();ctx.fill();const ls=fitLines(text,maxW-50,ctx.font,4);ls.forEach((ln,i)=>ctx.fillText(ln,margin+38,y+i*39));y+=Math.max(80,ls.length*39+42)}}
  if(f.logo)drawLogo();$('renderStatus').textContent=`Vista previa ${f.w} × ${f.h}px`;}
 function syncSliders(){const c=crops[current];$('zoom').value=c.z;$('posX').value=c.x;$('posY').value=c.y;$('zoomV').textContent=c.z.toFixed(2)+'×';$('posXV').textContent=Math.round(c.x*100);$('posYV').textContent=Math.round(c.y*100)}
@@ -501,7 +501,7 @@ $('caseLogoFile').onchange=e=>{
   reader.onerror=()=>status.textContent='No pude leer el archivo.';
   reader.readAsDataURL(file);
 };
-['place','title','subtitle','bullet1','bullet2','dots'].forEach(id=>$(id).addEventListener('input',()=>{counts();render()}));
+['place','title','subtitle','bullet1','bullet2'].forEach(id=>$(id).addEventListener('input',()=>{counts();render()}));
 ['zoom','posX','posY'].forEach(id=>$(id).addEventListener('input',()=>{const c=crops[current];c.z=+$('zoom').value;c.x=+$('posX').value;c.y=+$('posY').value;syncSliders();render()}));
 $('resetCrop').onclick=()=>{crops[current]={z:1,x:0,y:0};syncSliders();render()};
 $('imageFile').onchange=e=>{const file=e.target.files[0];if(!file)return;const status=$('imageStatus');status.textContent='Cargando imagen…';const reader=new FileReader();reader.onerror=()=>status.textContent='No pude leer el archivo.';reader.onload=()=>{const next=new Image();next.onload=()=>{img=next;imageReady=true;Object.keys(crops).forEach(k=>crops[k]={z:1,x:0,y:0});syncSliders();render();status.textContent=`Imagen cargada: ${file.name}`};next.onerror=()=>{status.textContent='El navegador no puede abrir esta imagen. Usa JPG, PNG o WebP; HEIC no suele ser compatible.'};next.src=reader.result};reader.readAsDataURL(file)};
