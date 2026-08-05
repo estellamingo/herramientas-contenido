@@ -251,7 +251,24 @@ function getOpaqueBounds(image){
 }
 function drawLogo(){const targetW=210,bottom=70,right=70;if(logoReady){const b=getOpaqueBounds(logoImg);const targetH=targetW*(b.h/b.w);ctx.drawImage(logoImg,b.x,b.y,b.w,b.h,canvas.width-right-targetW,canvas.height-bottom-targetH,targetW,targetH);return}const x=canvas.width-right,y=canvas.height-bottom;ctx.save();ctx.textAlign='right';ctx.textBaseline='bottom';ctx.fillStyle='#fff';ctx.font='800 64px Montserrat,Arial';ctx.fillText('FGE',x-88,y);ctx.textAlign='left';ctx.font='700 14px Montserrat,Arial';ctx.fillText('FISCALÍA',x-82,y-38);ctx.fillText('GENERAL',x-82,y-21);ctx.fillText('DEL ESTADO',x-82,y-4);ctx.restore()}
 function render(){const f=formats[current];canvas.width=f.w;canvas.height=f.h;if(imageReady)drawCover(img,f.w,f.h,crops[current]);overlay(f.w,f.h);blockOverlay(f);if(current==='portrait')gradient45();
- const margin=70,maxW=f.w-140;ctx.fillStyle='#fff';if(identificationMode==='case'){drawCaseLogo(f)}else{pin(f.placeX,f.placeY-32,34);ctx.font='700 40px Montserrat,Arial';ctx.textBaseline='alphabetic';ctx.fillText($('place').value||'Lugar',f.placeX+53,f.placeY);}
+ const margin=70,maxW=f.w-140;ctx.fillStyle='#fff';if(identificationMode==='case'){
+  drawCaseLogo(f)
+}else{
+  const placeLabel=$('place').value||'Lugar';
+  ctx.font='700 40px Montserrat,Arial';
+  ctx.textBaseline='alphabetic';
+  if(current==='story'){
+    const rightMargin=70;
+    const pinX=f.w-rightMargin-25;
+    pin(pinX,f.placeY-32,34);
+    ctx.textAlign='right';
+    ctx.fillText(placeLabel,pinX-18,f.placeY);
+    ctx.textAlign='left';
+  }else{
+    pin(f.placeX,f.placeY-32,34);
+    ctx.fillText(placeLabel,f.placeX+53,f.placeY);
+  }
+}
  let title=($('title').value||'Titular').trim();if(current==='portrait')title=title.toUpperCase();ctx.font=`800 ${f.titleSize}px Montserrat,Arial`;const titleLines=fitLines(title,maxW,ctx.font,4);ctx.textBaseline='top';titleLines.forEach((ln,i)=>ctx.fillText(ln,margin,f.titleY+i*f.titleLeading));
  const subY=f.titleY+titleLines.length*f.titleLeading+8;ctx.font=`400 ${f.subtitleSize}px Montserrat,Arial`;const subLines=fitLines($('subtitle').value,maxW,ctx.font,3);subLines.forEach((ln,i)=>ctx.fillText(ln,margin,subY+i*44));const indY=subY+subLines.length*44+22;drawIndicator(margin,indY,3);
  if(current==='portrait'){const mainBlockBottom=(f.titleY-80)+410;let y=Math.max(indY+120,mainBlockBottom+55);ctx.font='400 30px Montserrat,Arial';for(const text of [$('bullet1').value,$('bullet2').value]){ctx.beginPath();ctx.moveTo(margin,y+8);ctx.lineTo(margin+14,y+16);ctx.lineTo(margin,y+24);ctx.closePath();ctx.fill();const ls=fitLines(text,maxW-50,ctx.font,4);ls.forEach((ln,i)=>ctx.fillText(ln,margin+38,y+i*39));y+=Math.max(80,ls.length*39+42)}}

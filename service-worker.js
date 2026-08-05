@@ -1,4 +1,4 @@
-const CACHE_NAME='daedalus-v10-5-20260805';
+const CACHE_NAME='daedalus-v10-6-20260805';
 const APP_SHELL=[
   "./README_PWA.md",
   "./README_V10.md",

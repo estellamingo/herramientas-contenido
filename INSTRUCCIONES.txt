@@ -1,10 +1,13 @@
 Sube estos tres archivos a la raíz del repositorio y reemplaza los existentes:
+
 - titulares.html
 - service-worker.js
 - version.json
 
-Después espera GitHub Pages y abre:
-titulares.html?v=1050
+Después espera el despliegue de GitHub Pages y abre:
+titulares.html?v=1060
 
-En escritorio, “Descargar los 3 PNG” debe descargar un ZIP.
-En iPhone, debe seguir abriendo la hoja de compartir.
+Resultado esperado:
+- 1:1: provincia arriba a la izquierda.
+- 4:5: provincia arriba a la izquierda.
+- 9:16: provincia arriba a la derecha, seguida por el icono.

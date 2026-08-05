@@ -1,12 +1,12 @@
 {
   "app": "Daedalus",
-  "version": "10.5.0",
-  "cache": "daedalus-v10-5-20260805",
+  "version": "10.6.0",
+  "cache": "daedalus-v10-6-20260805",
   "offline": true,
   "changes": [
-    "Exportación múltiple usa compartir solo en móvil",
-    "Escritorio descarga ZIP",
-    "Fallback a descargas individuales",
-    "Biblioteca y PWA conservadas"
+    "Provincia a la derecha en formato 9:16",
+    "Icono geográfico ubicado después del nombre en 9:16",
+    "1:1 y 4:5 conservan provincia a la izquierda",
+    "Exportación de escritorio V10.5 conservada"
   ]
 }
