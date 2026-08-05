@@ -1,13 +1,4 @@
 {
-  "app": "Daedalus",
-  "version": "10.3.0",
-  "cache": "daedalus-v10-3-20260805",
-  "offline": true,
-  "changes": [
-    "Botón Actualizar biblioteca",
-    "Lectura directa de assets/marcas mediante GitHub API",
-    "Marcas descargadas y almacenadas en IndexedDB",
-    "Biblioteca disponible offline después de sincronizar",
-    "Eliminación de GitHub Actions y scripts de catálogo"
-  ]
+  "version": "10.4.0",
+  "change": "Indicador fijo de 3 puntos. Selector eliminado."
 }
