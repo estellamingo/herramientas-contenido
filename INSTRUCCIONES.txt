@@ -1,17 +1,10 @@
-SUBE SOLO ESTOS ARCHIVOS A LA RAÍZ DEL REPOSITORIO:
-
+Sube estos tres archivos a la raíz del repositorio y reemplaza los existentes:
 - titulares.html
 - service-worker.js
 - version.json
 
-En GitHub:
-1. Ve a la pantalla principal del repositorio.
-2. Add file > Upload files.
-3. Arrastra estos tres archivos.
-4. Confirma que GitHub indique que reemplazará titulares.html, service-worker.js y version.json.
-5. Commit changes.
-6. Espera el despliegue de GitHub Pages.
-7. Abre esta URL agregando ?v=1043 al final:
-   titulares.html?v=1043
+Después espera GitHub Pages y abre:
+titulares.html?v=1050
 
-Esto evita confundir archivos antiguos o carpetas anidadas.
+En escritorio, “Descargar los 3 PNG” debe descargar un ZIP.
+En iPhone, debe seguir abriendo la hoja de compartir.

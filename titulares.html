@@ -526,7 +526,74 @@ async function renderForExport(fmt){
   return await canvasBlob();
 }
 $('download').onclick=async()=>{const btn=$('download');const oldText=btn.textContent;btn.disabled=true;btn.textContent='Preparando PNG…';$('renderStatus').textContent='Generando archivo…';try{const blob=await renderForExport(current);downloadBlob(blob,filename(current));$('renderStatus').textContent='PNG exportado correctamente.'}catch(err){console.error(err);$('renderStatus').textContent='No se pudo exportar. Abre el archivo en Chrome y vuelve a intentarlo.';alert('Error al exportar: '+(err.message||err))}finally{btn.disabled=false;btn.textContent=oldText}}
-$('downloadAll').onclick=async()=>{const btn=$('downloadAll'),oldText=btn.textContent,old=current;btn.disabled=true;btn.textContent='Preparando…';$('renderStatus').textContent='Generando formatos…';try{const blobs=[];for(const fmt of ['square','story','portrait']){blobs.push(new File([await renderForExport(fmt)],filename(fmt),{type:'image/png'}))}if(navigator.share&&navigator.canShare&&navigator.canShare({files:blobs})){await navigator.share({files:blobs,title:'Titulares exportados'});$('renderStatus').textContent='Archivos listos para compartir.';}else{if(typeof JSZip==='undefined')throw new Error('No se cargó el módulo ZIP.');const zip=new JSZip();for(const f of blobs){zip.file(f.name,f)}const pack=await zip.generateAsync({type:'blob'});downloadBlob(pack,`FGE_3_formatos_${new Date().toISOString().slice(0,10)}.zip`);$('renderStatus').textContent='ZIP exportado correctamente.';}}catch(err){console.error(err);$('renderStatus').textContent='No se pudo exportar.';}finally{current=old;document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.format===current));syncSliders();render();btn.disabled=false;btn.textContent=oldText}};
+function isLikelyMobileDevice(){
+  const ua=navigator.userAgent||'';
+  const touch=Number(navigator.maxTouchPoints||0)>1;
+  return /iPhone|iPad|iPod|Android/i.test(ua) || (touch && window.innerWidth<=1024);
+}
+async function downloadFilesAsZip(files){
+  if(typeof JSZip==='undefined')throw new Error('No se cargó el módulo ZIP.');
+  const zip=new JSZip();
+  for(const file of files)zip.file(file.name,file);
+  const pack=await zip.generateAsync({type:'blob'});
+  downloadBlob(pack,`FGE_3_formatos_${new Date().toISOString().slice(0,10)}.zip`);
+}
+async function downloadFilesIndividually(files){
+  for(const file of files){
+    downloadBlob(file,file.name);
+    await new Promise(resolve=>setTimeout(resolve,350));
+  }
+}
+$('downloadAll').onclick=async()=>{
+  const btn=$('downloadAll');
+  const oldText=btn.textContent;
+  const old=current;
+  const files=[];
+  btn.disabled=true;
+  btn.textContent='Preparando…';
+  $('renderStatus').textContent='Generando formatos…';
+  try{
+    for(const fmt of ['square','story','portrait']){
+      const blob=await renderForExport(fmt);
+      files.push(new File([blob],filename(fmt),{type:'image/png'}));
+    }
+
+    const canShareFiles=
+      isLikelyMobileDevice() &&
+      typeof navigator.share==='function' &&
+      typeof navigator.canShare==='function' &&
+      navigator.canShare({files});
+
+    if(canShareFiles){
+      await navigator.share({files,title:'Titulares exportados'});
+      $('renderStatus').textContent='Archivos listos para compartir.';
+    }else{
+      await downloadFilesAsZip(files);
+      $('renderStatus').textContent='ZIP exportado correctamente.';
+    }
+  }catch(err){
+    console.error('Error al exportar los tres formatos:',err);
+    try{
+      if(files.length){
+        await downloadFilesIndividually(files);
+        $('renderStatus').textContent='Se descargaron los PNG individualmente.';
+      }else{
+        throw err;
+      }
+    }catch(fallbackErr){
+      console.error('También falló la descarga individual:',fallbackErr);
+      $('renderStatus').textContent='No se pudo exportar. Revisa la consola.';
+      alert('Error al exportar los tres formatos: '+(fallbackErr.message||fallbackErr));
+    }
+  }finally{
+    current=old;
+    document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.format===current));
+    syncSliders();
+    render();
+    btn.disabled=false;
+    btn.textContent=oldText;
+  }
+};
 function counts(){for(const id of ['title','subtitle','bullet1','bullet2'])$(id+'Count').textContent=$(id).value.length+' caracteres'}
 async function initializeFontsAndRender(){
   try{
