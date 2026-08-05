@@ -1,6 +1,9 @@
-const CACHE_NAME='daedalus-v10-1-20260805';
+const CACHE_NAME='daedalus-v10-2-20260805';
 const APP_SHELL=[
+  "./.github/workflows/actualizar-catalogo.yml",
   "./README_PWA.md",
+  "./README_V10.md",
+  "./README_V10_1.md",
   "./README_V9.md",
   "./assets/fonts/Montserrat-Bold.otf",
   "./assets/fonts/Montserrat-ExtraBold.otf",
@@ -13,6 +16,7 @@ const APP_SHELL=[
   "./assets/icons/icon-192.png",
   "./assets/icons/icon-512.png",
   "./assets/marcas/AAA.png",
+  "./assets/marcas/README_BIBLIOTECA.txt",
   "./assets/marcas/amistad.png",
   "./assets/marcas/blanqueo-jr.png",
   "./assets/marcas/catalogo.json",
@@ -40,6 +44,7 @@ const APP_SHELL=[
   "./js/parser.js",
   "./js/templateStore.js",
   "./manifest.webmanifest",
+  "./scripts/generar_catalogo.py",
   "./titulares.html",
   "./version.json"
 ];

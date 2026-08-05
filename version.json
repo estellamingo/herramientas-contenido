@@ -1,11 +1,11 @@
 {
   "app": "Daedalus",
-  "version": "10.1.0",
-  "cache": "daedalus-v10-1-20260805",
+  "version": "10.2.0",
+  "cache": "daedalus-v10-2-20260805",
   "offline": true,
   "changes": [
-    "Logo institucional fijo dentro de la plantilla",
-    "Eliminación del control de reemplazo de logo",
-    "Interfaz simplificada en el módulo Imagen"
+    "Catálogo de marcas generado automáticamente desde archivos PNG",
+    "GitHub Action para sincronizar catalogo.json",
+    "Ya no es necesario editar JSON manualmente"
   ]
 }

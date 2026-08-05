@@ -1,0 +1,29 @@
+CÓMO ACTUALIZAR LA BIBLIOTECA DE MARCAS
+
+Después de subir esta versión a GitHub, ya no tienes que editar catalogo.json.
+
+Para añadir una marca nueva:
+
+1. Entra a la carpeta:
+   assets / marcas
+
+2. Pulsa “Add file” y luego “Upload files”.
+
+3. Sube uno o varios archivos PNG transparentes.
+
+4. Confirma el cambio con “Commit changes”.
+
+5. GitHub ejecutará automáticamente una tarea llamada:
+   “Actualizar biblioteca de marcas”.
+
+6. Esa tarea actualizará catalogo.json y publicará la nueva biblioteca.
+
+7. Abre Daedalus una vez con internet para descargar la actualización.
+
+IMPORTANTE:
+- El nombre que aparece en Daedalus sale del nombre del archivo.
+- Ejemplo:
+  caso-altares.png → Caso Altares
+  METASTASIS.png → METASTASIS
+
+Para cambiar el nombre visible, renombra el archivo PNG antes de subirlo.
