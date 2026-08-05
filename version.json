@@ -1,12 +1,11 @@
 {
   "app": "Daedalus",
-  "version": "10.0.0",
-  "cache": "daedalus-v10-20260805",
+  "version": "10.1.0",
+  "cache": "daedalus-v10-1-20260805",
   "offline": true,
-  "features": [
-    "Biblioteca de marcas desde GitHub",
-    "Búsqueda y recientes",
-    "Carga temporal de PNG",
-    "Eliminación del texto de referencia"
+  "changes": [
+    "Logo institucional fijo dentro de la plantilla",
+    "Eliminación del control de reemplazo de logo",
+    "Interfaz simplificada en el módulo Imagen"
   ]
 }
