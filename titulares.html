@@ -554,5 +554,19 @@ if ('serviceWorker' in navigator) {
 }
 </script>
 
+
+<script>
+window.addEventListener('DOMContentLoaded', () => {
+  const dots = document.getElementById('dots');
+  if (dots) {
+    const previous = dots.previousElementSibling;
+    if (previous && previous.textContent.trim() === 'Número de puntos del indicador') {
+      previous.remove();
+    }
+    dots.remove();
+  }
+});
+</script>
+
 </body>
 </html>
