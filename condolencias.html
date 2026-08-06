@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Daedalus · Condolencias</title>
-<link rel="stylesheet" href="css/fonts.css?v=1410">
+<link rel="stylesheet" href="css/fonts.css?v=1420">
 <style>
 :root{
   --bg:#0f1115;--panel:#171b21;--panel2:#20252d;--line:#303743;
@@ -40,8 +40,9 @@ input[type="text"],input[type="date"]{
 .help{font-size:11px;line-height:1.45;color:var(--muted);margin:9px 0 16px}
 .export{width:100%;background:var(--accent);border-color:var(--accent);font-size:14px}
 .status{margin-top:10px;padding:9px 10px;border-radius:8px;background:#20252d;color:#aab2bf;font-size:11px}
-.stage{padding:28px;overflow:auto;display:flex;align-items:flex-start;justify-content:center}
-.preview-shell{transform-origin:top center}
+.stage{padding:28px;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;min-width:0}
+.preview-viewport{position:relative;flex:0 0 auto;overflow:visible}
+.preview-shell{position:absolute;left:0;top:0;width:1080px;transform-origin:top left}
 .artboard{
   position:relative;width:1080px;min-height:760px;background:#fff;color:#111;overflow:hidden;
   box-shadow:0 0 0 1px rgba(255,255,255,.07);
@@ -64,9 +65,34 @@ input[type="text"],input[type="date"]{
 .content-render .bold{font-size:24px;font-weight:700;line-height:34px}
 .content-render .black{font-size:40px;font-family:'Montserrat Condolencias Black',Montserrat,Arial,sans-serif;font-weight:900;line-height:48px}
 @media(max-width:900px){
-  .layout{display:block}
-  .panel{border-right:0;border-bottom:1px solid var(--line)}
-  .stage{padding:16px}
+  body{overflow-x:hidden}
+  .topbar{
+    position:sticky;top:0;z-index:20;height:52px;padding:0 14px;
+    gap:10px;background:#090b0e
+  }
+  .topbar a{font-size:12px;min-height:44px;display:flex;align-items:center}
+  .topbar span{font-size:12px}
+  .layout{display:flex;flex-direction:column;min-height:0}
+  .panel{
+    width:100%;border-right:0;border-bottom:1px solid var(--line);
+    padding:16px 14px
+  }
+  .panel .intro{margin-bottom:14px}
+  input[type="text"],input[type="date"],button,.editor{font-size:16px}
+  .toolbar button,.export{min-height:44px;touch-action:manipulation}
+  .editor{min-height:240px;max-height:46vh;padding:12px}
+  .help{margin-bottom:12px}
+  .stage{
+    width:100%;padding:14px 10px 24px;overflow:hidden;
+    justify-content:center;background:#0f1115
+  }
+  .preview-viewport{max-width:100%}
+}
+@media(max-width:520px){
+  .toolbar{grid-template-columns:1fr 1fr 1fr 44px}
+  .toolbar button{padding:9px 5px;font-size:13px}
+  .panel h1{font-size:17px}
+  .stage{padding-left:8px;padding-right:8px}
 }
 </style>
 </head>
@@ -104,17 +130,19 @@ input[type="text"],input[type="date"]{
   </aside>
 
   <section class="stage">
-    <div id="previewShell" class="preview-shell">
-      <div id="artboard" class="artboard">
-        <div class="static-header"><img src="assets/templates/condolencias-base.svg?v=1410" alt=""></div>
+    <div id="previewViewport" class="preview-viewport">
+      <div id="previewShell" class="preview-shell">
+        <div id="artboard" class="artboard">
+        <div class="static-header"><img src="assets/templates/condolencias-base.svg?v=1420" alt=""></div>
         <div id="dateRender" class="date-render"></div>
         <div id="contentRender" class="content-render"></div>
-        <div id="footer" class="static-footer"><img src="assets/templates/condolencias-base.svg?v=1410" alt=""></div>
+        <div id="footer" class="static-footer"><img src="assets/templates/condolencias-base.svg?v=1420" alt=""></div>
+        </div>
       </div>
     </div>
   </section>
 </main>
 
-<script src="js/condolencias.js?v=1410"></script>
+<script src="js/condolencias.js?v=1420"></script>
 </body>
 </html>

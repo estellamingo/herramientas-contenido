@@ -6,6 +6,7 @@ const contentRender=document.getElementById("contentRender");
 const artboard=document.getElementById("artboard");
 const footer=document.getElementById("footer");
 const previewShell=document.getElementById("previewShell");
+const previewViewport=document.getElementById("previewViewport");
 const status=document.getElementById("status");
 const exportBtn=document.getElementById("exportBtn");
 
@@ -159,11 +160,21 @@ function layout(){
 
 function fitPreview(){
   const stage=document.querySelector(".stage");
-  const available=Math.max(300,stage.clientWidth-24);
+  if(!stage || !previewShell || !previewViewport)return;
+
+  const horizontalPadding=window.innerWidth<=900 ? 20 : 56;
+  const available=Math.max(240,stage.clientWidth-horizontalPadding);
   const scale=Math.min(1,available/1080);
+  const naturalHeight=Number(artboard.dataset.height||MIN_HEIGHT);
+
+  // El shell conserva siempre el tamaño real 1080 px.
+  // Solo se escala visualmente; el viewport ocupa exactamente el tamaño visible.
+  previewShell.style.width="1080px";
+  previewShell.style.height=`${naturalHeight}px`;
   previewShell.style.transform=`scale(${scale})`;
-  previewShell.style.width=`${1080*scale}px`;
-  previewShell.style.height=`${Number(artboard.dataset.height||MIN_HEIGHT)*scale}px`;
+
+  previewViewport.style.width=`${Math.round(1080*scale)}px`;
+  previewViewport.style.height=`${Math.round(naturalHeight*scale)}px`;
 }
 
 function canvasTextStyle(style){

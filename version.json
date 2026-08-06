@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "14.1.0",
-  "cache": "daedalus-v14-1-20260806",
+  "version": "14.2.0",
+  "cache": "daedalus-v14-2-responsive-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,10 +9,11 @@
     "condolencias"
   ],
   "changes": [
-    "Condolencias: alto realmente dinámico también para textos mínimos",
-    "El pie sube automáticamente cuando el contenido es corto",
-    "El pie continúa bajando cuando el contenido crece",
-    "Se mantiene un mínimo visual para evitar composiciones excesivamente comprimidas",
-    "Se conservan jerarquías Regular 24, Bold 24 y Black 40, tracking 0 y margen de 50 px"
+    "Responsive Cleanup general para teléfono y tablet",
+    "Condolencias: preview móvil usa viewport escalado sin recorte horizontal",
+    "Condolencias: editor y controles optimizados para touch",
+    "Comunicados: preview ajustado al ancho real disponible en móvil",
+    "Titulares: workspace, canvas y controles adaptados a pantallas pequeñas",
+    "No se modificó la lógica de exportación de los tres módulos"
   ]
 }

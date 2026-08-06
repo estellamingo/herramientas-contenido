@@ -32,6 +32,41 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 }
 </style>
 
+
+<style>
+/* Responsive Cleanup 14.2 */
+@media(max-width:900px){
+  html,body{overflow-x:hidden}
+  .suite-nav{
+    position:sticky;top:0;z-index:30;height:52px;padding:0 14px;gap:10px
+  }
+  .suite-nav a{min-height:44px;display:flex;align-items:center;font-size:12px}
+  .suite-nav span{font-size:11px}
+  .app{display:flex!important;flex-direction:column!important;min-width:0}
+  .panel{
+    width:100%!important;position:static!important;height:auto!important;
+    max-height:none!important;overflow:visible!important;padding:14px!important
+  }
+  .panel textarea{height:230px!important;min-height:180px}
+  .stage{
+    width:100%!important;min-width:0!important;min-height:0!important;
+    padding:12px 10px 24px!important;overflow:hidden!important
+  }
+  .artboard-wrap{
+    width:100%!important;max-width:100%!important;overflow:hidden!important;
+    background:transparent!important;box-shadow:none!important
+  }
+  .artboard{transform-origin:top left!important}
+  input,textarea,select,button{font-size:16px!important}
+  button,input,textarea,select{min-height:44px}
+}
+@media(max-width:520px){
+  .suite-nav span{display:none}
+  .panel{padding:12px!important}
+  .stage{padding-left:8px!important;padding-right:8px!important}
+}
+</style>
+
 </head><body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de comunicados</span><a href="titulares.html">Ir a titulares</a></nav>
 <main class="app"><aside class="panel"><h1>Generador de comunicados</h1>
 <label>Plantilla</label><select id="templateSelect"></select>
@@ -53,7 +88,7 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
   function fitArtboard(){
     if(!wrap||!art) return;
     if(window.innerWidth>900){ art.style.transform=''; wrap.style.height=''; return; }
-    const available=Math.max(280, wrap.clientWidth);
+    const available=Math.max(240, Math.min(wrap.clientWidth, window.innerWidth-20));
     const scale=Math.min(1, available/1080);
     art.style.transform=`scale(${scale})`;
     const naturalHeight=parseFloat(getComputedStyle(art).height)||art.scrollHeight||358;

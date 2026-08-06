@@ -122,6 +122,37 @@ button,.filebtn,input,textarea,select{min-height:44px;touch-action:manipulation}
 </style>
 
 <link rel="stylesheet" href="./css/fonts.css">
+
+<style>
+/* Responsive Cleanup 14.2 */
+@media(max-width:980px){
+  html,body{overflow-x:hidden}
+  .suite-nav{padding:0 14px;gap:10px}
+  .suite-nav a{min-height:44px;display:flex;align-items:center}
+  .app{display:flex!important;flex-direction:column!important;min-width:0}
+  aside{width:100%!important;max-width:none!important;overflow:visible!important}
+  main{width:100%!important;min-width:0!important;overflow:visible!important}
+  .workspace{width:100%!important;min-width:0!important}
+  .stage{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden!important}
+  canvas{max-width:100%!important;height:auto!important}
+  .tools{width:100%!important;max-width:none!important}
+  button,.filebtn,input,textarea,select{font-size:16px;min-height:44px}
+}
+@media(max-width:600px){
+  .suite-nav span{display:none}
+  aside,main{padding:12px!important}
+  .section{padding:12px!important}
+  .row{grid-template-columns:1fr!important}
+  .tabs{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;top:52px!important
+  }
+  .tab{font-size:12px!important;padding:9px 5px!important}
+  .stage{padding:8px!important;min-height:300px!important}
+  .workspace{gap:10px!important}
+}
+</style>
+
 </head>
 <body><nav class="suite-nav"><a href="index.html">← Inicio</a><span>Generador de titulares</span><a href="comunicado.html">Ir a comunicados</a></nav>
 <header><div><strong>Generador de piezas</strong></div><span>1:1 · 9:16 · 4:5</span></header>
