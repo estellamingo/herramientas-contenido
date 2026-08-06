@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "14.0.0",
-  "cache": "daedalus-v14-20260806",
+  "version": "14.1.0",
+  "cache": "daedalus-v14-1-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,12 +9,10 @@
     "condolencias"
   ],
   "changes": [
-    "Nuevo módulo Condolencias",
-    "Fecha independiente y editor único de texto",
-    "Jerarquías Regular 24, Bold 24 y Black 40",
-    "Tracking 0 y margen general de 50 px",
-    "Alto dinámico según contenido",
-    "Pie institucional se desplaza automáticamente",
-    "Exportación PNG directa en escritorio y Compartir en móvil"
+    "Condolencias: alto realmente dinámico también para textos mínimos",
+    "El pie sube automáticamente cuando el contenido es corto",
+    "El pie continúa bajando cuando el contenido crece",
+    "Se mantiene un mínimo visual para evitar composiciones excesivamente comprimidas",
+    "Se conservan jerarquías Regular 24, Bold 24 y Black 40, tracking 0 y margen de 50 px"
   ]
 }

@@ -1,8 +1,9 @@
-const CACHE_NAME='daedalus-v14-20260806';
+const CACHE_NAME='daedalus-v14-1-20260806';
 const APP_SHELL=[
   "./ESTRUCTURA_V12.txt",
   "./LEEME_PRIMERO.txt",
   "./LEEME_V13.txt",
+  "./LEEME_V14_CONDOLENCIAS.txt",
   "./assets/fonts/Montserrat-Bold.otf",
   "./assets/fonts/Montserrat-ExtraBold.otf",
   "./assets/fonts/Montserrat-Regular.otf",

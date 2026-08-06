@@ -9,13 +9,13 @@ const previewShell=document.getElementById("previewShell");
 const status=document.getElementById("status");
 const exportBtn=document.getElementById("exportBtn");
 
-const BASE_HEIGHT=760;
 const HEADER_BOTTOM=210;
 const CONTENT_TOP=230;
 const FOOTER_SOURCE_Y=600;
 const FOOTER_HEIGHT=160;
 const FOOTER_GAP=38;
-const BOTTOM_MARGIN=0;
+const MIN_FOOTER_TOP=390; // evita que el pie suba demasiado en textos mínimos
+const MIN_HEIGHT=MIN_FOOTER_TOP+FOOTER_HEIGHT;
 
 const EXAMPLE=`Ante el fallecimiento de nuestro compañero
 
@@ -145,9 +145,11 @@ function render(){
 function layout(){
   const contentHeight=Math.ceil(contentRender.getBoundingClientRect().height);
   const contentBottom=CONTENT_TOP+contentHeight;
-  const defaultFooterTop=600;
-  const footerTop=Math.max(defaultFooterTop,contentBottom+FOOTER_GAP);
-  const totalHeight=Math.max(BASE_HEIGHT,footerTop+FOOTER_HEIGHT+BOTTOM_MARGIN);
+
+  // El pie acompaña al contenido en ambos sentidos:
+  // sube cuando el texto es corto y baja cuando el texto crece.
+  const footerTop=Math.max(MIN_FOOTER_TOP,contentBottom+FOOTER_GAP);
+  const totalHeight=Math.max(MIN_HEIGHT,footerTop+FOOTER_HEIGHT);
 
   footer.style.top=`${footerTop}px`;
   artboard.style.height=`${totalHeight}px`;
@@ -161,7 +163,7 @@ function fitPreview(){
   const scale=Math.min(1,available/1080);
   previewShell.style.transform=`scale(${scale})`;
   previewShell.style.width=`${1080*scale}px`;
-  previewShell.style.height=`${Number(artboard.dataset.height||BASE_HEIGHT)*scale}px`;
+  previewShell.style.height=`${Number(artboard.dataset.height||MIN_HEIGHT)*scale}px`;
 }
 
 function canvasTextStyle(style){
@@ -230,7 +232,7 @@ async function exportPNG(){
     render();
     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
 
-    const height=Number(artboard.dataset.height||BASE_HEIGHT);
+    const height=Number(artboard.dataset.height||MIN_HEIGHT);
     const canvas=document.createElement("canvas");
     canvas.width=1080;
     canvas.height=height;
