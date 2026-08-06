@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "11.1.0",
-  "cache": "daedalus-v11-1-20260806",
+  "version": "11.2.0",
+  "cache": "daedalus-v11-2-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,10 +9,11 @@
     "condolencias"
   ],
   "changes": [
-    "Exportación de comunicados corregida",
-    "Comunicados descargan PNG directamente en escritorio",
-    "Comunicados usan Compartir en móvil para guardar en Fotos",
-    "Eliminados botones Actualizar y Descargar HTML",
-    "Nuevo exportador con estilos y fuentes incrustados"
+    "Comunicados: un único botón Exportar PNG",
+    "Escritorio: descarga directa del PNG",
+    "iPhone y móvil compatible: hoja Compartir para guardar en Fotos",
+    "Eliminados Actualizar y Descargar HTML",
+    "Exportador con estilos, imágenes y fuentes incrustados",
+    "Paquete preparado para actualización mediante GitHub Desktop"
   ]
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME='daedalus-v11-1-20260806';
+const CACHE_NAME='daedalus-v11-2-20260806';
 const APP_SHELL=[
   "./COMO_SINCRONIZAR_MARCAS.txt",
   "./README_PWA.md",
