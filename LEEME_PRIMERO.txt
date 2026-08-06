@@ -1,40 +1,31 @@
-DAEDALUS V11.2 — ACTUALIZACIÓN LOCAL CON GITHUB DESKTOP
+DAEDALUS V11.3 — CORRECCIÓN DEL ERROR TAINTED CANVAS
 
-1. Abre en Finder la carpeta local:
+El mensaje de error confirmó que el exportador anterior contaminaba el canvas
+al convertir todo el HTML mediante foreignObject.
+
+Esta versión:
+- rasteriza la plantilla SVG local;
+- dibuja el texto directamente sobre canvas;
+- evita el error “Tainted canvases may not be exported”.
+
+INSTALACIÓN CON GITHUB DESKTOP
+
+1. Abre:
    Documentos/Daedalus/herramientas-contenido
 
-2. Abre esta carpeta ACTUALIZACION_LOCAL_V11_2.
+2. Arrastra dentro el contenido de esta actualización.
+   Conserva la carpeta js y el archivo dentro de exporters.
 
-3. Arrastra su contenido sobre la carpeta herramientas-contenido.
-   macOS preguntará si deseas reemplazar los archivos existentes.
-   Elige REEMPLAZAR.
+3. Reemplaza:
+   - js/exporters/exporter.js
+   - service-worker.js
+   - version.json
 
-IMPORTANTE:
-- No arrastres la carpeta ACTUALIZACION_LOCAL_V11_2 completa.
-- Arrastra los archivos y la carpeta js que están dentro.
-- La estructura debe quedar así:
+4. En GitHub Desktop escribe:
+   Daedalus V11.3 - corregir tainted canvas
 
-herramientas-contenido/
-├── comunicado.html
-├── service-worker.js
-├── version.json
-└── js/
-    ├── app.js
-    └── exporters/
-        └── exporter.js
-
-4. Vuelve a GitHub Desktop.
-5. Deben aparecer 5 archivos modificados.
-6. En Summary escribe:
-   Daedalus V11.2 - corregir exportación de comunicados
-7. Pulsa Commit to main.
-8. Pulsa Push origin.
-9. Espera el despliegue de GitHub Pages.
-10. Prueba:
-    https://estellamingo.github.io/herramientas-contenido/comunicado.html?v=1120
-
-RESULTADO ESPERADO:
-- Los textos actualizan la vista previa automáticamente.
-- Solo aparece el botón Exportar PNG.
-- En escritorio descarga un PNG.
-- En iPhone abre la hoja Compartir para guardar en Fotos.
+5. Commit to main.
+6. Push origin.
+7. Espera GitHub Pages.
+8. Abre:
+   comunicado.html?v=1130

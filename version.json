@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "11.2.0",
-  "cache": "daedalus-v11-2-20260806",
+  "version": "11.3.0",
+  "cache": "daedalus-v11-3-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,11 +9,10 @@
     "condolencias"
   ],
   "changes": [
-    "Comunicados: un único botón Exportar PNG",
-    "Escritorio: descarga directa del PNG",
-    "iPhone y móvil compatible: hoja Compartir para guardar en Fotos",
-    "Eliminados Actualizar y Descargar HTML",
-    "Exportador con estilos, imágenes y fuentes incrustados",
-    "Paquete preparado para actualización mediante GitHub Desktop"
+    "Comunicados: eliminado el error Tainted canvas",
+    "Plantilla SVG rasterizada sin foreignObject",
+    "Texto dibujado directamente sobre canvas",
+    "Escritorio descarga PNG directamente",
+    "Móvil conserva Compartir para guardar en Fotos"
   ]
 }
