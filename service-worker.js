@@ -1,4 +1,4 @@
-const CACHE_NAME='daedalus-v13-20260806';
+const CACHE_NAME='daedalus-v13-1-20260806';
 const APP_SHELL=[
   "./ESTRUCTURA_V12.txt",
   "./LEEME_PRIMERO.txt",

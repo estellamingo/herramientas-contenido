@@ -1,0 +1,13 @@
+DAEDALUS V13.1 — CORRECCIÓN DE BARRA LATERAL
+
+Reemplaza únicamente:
+- comunicado.html
+- js/exporters/exporter.js
+- service-worker.js
+- version.json
+
+Prueba local:
+http://localhost:8000/comunicado.html?v=1310
+
+La barra lateral ahora se dibuja como una sola pieza continua,
+sin la unión visible entre el SVG fijo y la extensión dinámica.

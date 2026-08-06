@@ -74,27 +74,36 @@ function drawBackgroundLayers(ctx,width,height){
       ctx.fillRect(0,top,width,h);
     }
   }
+}
 
+function drawContinuousSidebar(ctx){
   const bar=document.getElementById("barExtension");
-  if(bar && getComputedStyle(bar).display!=="none"){
-    const style=getComputedStyle(bar);
-    const x=cssNumber(style.left);
-    const y=cssNumber(style.top);
-    const w=cssNumber(style.width);
-    const h=cssNumber(style.height);
-    const radius=cssNumber(style.borderRadius);
+  if(!bar || getComputedStyle(bar).display==="none")return;
 
-    const gradient=ctx.createLinearGradient(0,y,0,y+h);
-    gradient.addColorStop(0,"#0a0045");
-    gradient.addColorStop(.45,"#5a80ff");
-    gradient.addColorStop(1,"#8fd1e7");
+  const style=getComputedStyle(bar);
+  const x=cssNumber(style.left);
+  const y=cssNumber(style.top);
+  const w=cssNumber(style.width);
+  const h=cssNumber(style.height);
+  const radius=cssNumber(style.borderRadius);
 
-    ctx.fillStyle=gradient;
-    ctx.beginPath();
-    if(ctx.roundRect)ctx.roundRect(x,y,w,h,radius);
-    else ctx.rect(x,y,w,h);
-    ctx.fill();
+  const gradient=ctx.createLinearGradient(0,y,0,y+h);
+  gradient.addColorStop(0,"#0a0045");
+  gradient.addColorStop(.20,"#2264cd");
+  gradient.addColorStop(.50,"#5a80ff");
+  gradient.addColorStop(.80,"#8fd1e7");
+  gradient.addColorStop(1,"#8fd1e7");
+
+  ctx.save();
+  ctx.fillStyle=gradient;
+  ctx.beginPath();
+  if(ctx.roundRect){
+    ctx.roundRect(x,y,w,h,radius);
+  }else{
+    ctx.rect(x,y,w,h);
   }
+  ctx.fill();
+  ctx.restore();
 }
 
 function textNodes(root){
@@ -187,6 +196,11 @@ async function renderOriginalCanvas(template){
   );
 
   ctx.drawImage(templateImage,0,0,width,svgHeight);
+
+  // Redibuja la barra completa sobre la barra incluida en el SVG.
+  // Así se evita la unión visible entre el tramo fijo y la extensión dinámica.
+  drawContinuousSidebar(ctx);
+
   drawDomText(ctx,artboard);
 
   return canvas;
