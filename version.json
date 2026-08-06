@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "13.1.0",
-  "cache": "daedalus-v13-1-20260806",
+  "version": "14.0.0",
+  "cache": "daedalus-v14-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,9 +9,12 @@
     "condolencias"
   ],
   "changes": [
-    "Corregida la unión visible de la barra lateral",
-    "La barra se renderiza como un único degradado continuo",
-    "Se conserva la exportación automática del original y la adaptación 4:5",
-    "Escritorio descarga ZIP cuando corresponden dos imágenes"
+    "Nuevo módulo Condolencias",
+    "Fecha independiente y editor único de texto",
+    "Jerarquías Regular 24, Bold 24 y Black 40",
+    "Tracking 0 y margen general de 50 px",
+    "Alto dinámico según contenido",
+    "Pie institucional se desplaza automáticamente",
+    "Exportación PNG directa en escritorio y Compartir en móvil"
   ]
 }

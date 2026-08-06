@@ -1,7 +1,8 @@
-const CACHE_NAME='daedalus-v13-1-20260806';
+const CACHE_NAME='daedalus-v14-20260806';
 const APP_SHELL=[
   "./ESTRUCTURA_V12.txt",
   "./LEEME_PRIMERO.txt",
+  "./LEEME_V13.txt",
   "./assets/fonts/Montserrat-Bold.otf",
   "./assets/fonts/Montserrat-ExtraBold.otf",
   "./assets/fonts/Montserrat-Regular.otf",
@@ -25,6 +26,7 @@ const APP_SHELL=[
   "./assets/marcas/pampa.png",
   "./assets/marcas/plaga.png",
   "./assets/marcas/purga.png",
+  "./assets/templates/condolencias-base.svg",
   "./assets/templates/fge-comunicado.svg",
   "./assets/vendor/jszip.min.js",
   "./comunicado.html",
@@ -34,6 +36,7 @@ const APP_SHELL=[
   "./css/styles.css",
   "./index.html",
   "./js/app.js",
+  "./js/condolencias.js",
   "./js/core/engine.js",
   "./js/core/parser.js",
   "./js/core/templateStore.js",
@@ -42,41 +45,20 @@ const APP_SHELL=[
   "./titulares.html",
   "./version.json"
 ];
-
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE_NAME).then(cache=>cache.addAll(APP_SHELL)));
   self.skipWaiting();
 });
-
 self.addEventListener('activate',event=>{
-  event.waitUntil(
-    caches.keys().then(keys=>Promise.all(
-      keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key))
-    ))
-  );
+  event.waitUntil(caches.keys().then(keys=>Promise.all(
+    keys.filter(key=>key!==CACHE_NAME).map(key=>caches.delete(key))
+  )));
   self.clients.claim();
 });
-
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
   const url=new URL(event.request.url);
   if(url.origin!==location.origin)return;
-
-  if(event.request.mode==='navigate'){
-    event.respondWith(
-      fetch(event.request)
-        .then(response=>{
-          const copy=response.clone();
-          caches.open(CACHE_NAME).then(cache=>cache.put(event.request,copy));
-          return response;
-        })
-        .catch(()=>caches.match(event.request).then(
-          cached=>cached||caches.match('./index.html')
-        ))
-    );
-    return;
-  }
-
   event.respondWith(
     fetch(event.request)
       .then(response=>{
