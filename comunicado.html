@@ -10,7 +10,7 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 .suite-nav{height:52px;padding:0 22px;background:#11141a;border-color:var(--suite-line)}
 .app{grid-template-columns:390px 1fr;gap:0;padding:0;min-height:calc(100vh - 52px)}
 .panel{top:52px!important;align-self:start;height:calc(100vh - 52px);overflow:auto;border:0;border-right:1px solid var(--suite-line);border-radius:0;background:#13161b;padding:18px;color:var(--suite-text)}
-.panel h1{font-size:15px;margin-bottom:20px}.panel label{font-size:11px;color:#c8ced7}.panel textarea,.panel input,.panel select{background:#0f1217;color:var(--suite-text);border:1px solid var(--suite-line);border-radius:8px}.panel textarea{height:330px}.panel button{border-radius:8px;background:var(--suite-accent)}.panel button.secondary{background:var(--suite-panel2)}.panel button.tertiary{background:transparent;border:1px solid var(--suite-line)}.panel .hint{color:var(--suite-muted)}
+.panel h1{font-size:15px;margin-bottom:20px}.panel label{font-size:11px;color:#c8ced7}.panel textarea,.panel input,.panel select{background:#0f1217;color:var(--suite-text);border:1px solid var(--suite-line);border-radius:8px}.panel textarea{height:330px}.panel button{border-radius:8px;background:var(--suite-accent);width:100%}.panel button.secondary{background:var(--suite-panel2)}.panel button.tertiary{background:transparent;border:1px solid var(--suite-line)}.panel .hint{color:var(--suite-muted)}
 .stage{border-radius:0;background:#1a1e25;padding:20px;min-height:calc(100vh - 52px)}
 .startup-status{background:#20242c;color:var(--suite-muted)}
 @media(max-width:900px){.app{grid-template-columns:1fr}.panel{position:static;height:auto;border-right:0;border-bottom:1px solid var(--suite-line)}.stage{min-height:auto}}
@@ -38,19 +38,13 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 <label>Cuerpo</label><textarea id="bodyInput"></textarea>
 <label>Firma</label><input id="signatureInput" type="text">
 <label>Fecha</label><input id="dateInput" type="text">
-<div class="actions"><button id="renderBtn">Actualizar</button><button id="exportPngBtn" class="secondary">Generar PNG</button><button id="downloadHtmlBtn" class="tertiary">Descargar HTML</button></div>
+<div class="actions"><button id="exportPngBtn">Exportar PNG</button></div>
 <div id="startupStatus" class="startup-status">Iniciando…</div>
 <p class="hint">Usa *texto* para negrita. Usa - o • para viñetas, 1. para listas numeradas, > para sangría y >> para doble sangría.</p>
 </aside><section class="stage"><div class="artboard-wrap"><div id="artboard" class="artboard">
 <div id="templateLayer" class="template-layer"></div><div id="extensionLayer" class="extension-layer"></div><div id="barExtension" class="bar-extension"></div>
 <div id="textLayer" class="text-layer"><div id="bodyText"></div><div id="signatureText"></div><div id="dateText"></div></div>
 </div></div></section></main>
-<div id="exportModal" class="export-modal" hidden><div class="export-modal-card">
-<div class="export-modal-head"><strong>Imagen generada</strong><button id="closeExportModal" class="modal-close" type="button">Cerrar</button></div>
-<p class="export-help">En iPhone: usa Compartir o mantén presionada la imagen y elige “Guardar en Fotos”.</p>
-<div class="export-actions"><button id="shareImageBtn" type="button">Compartir</button><button id="downloadImageBtn" type="button" class="secondary">Descargar</button><button id="openImageBtn" type="button" class="tertiary">Abrir imagen</button></div>
-<div id="exportStatus" class="export-status"></div><div id="exportImageWrap" class="export-image-wrap"></div>
-</div></div>
 <script src="js/core/templateStore.js"></script><script src="js/core/parser.js"></script><script src="js/core/engine.js"></script><script src="js/exporters/exporter.js"></script><script src="js/app.js"></script>
 <script>
 (function(){

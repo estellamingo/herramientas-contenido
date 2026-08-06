@@ -1,12 +1,18 @@
 {
   "app": "Daedalus",
-  "version": "10.6.0",
-  "cache": "daedalus-v10-6-20260805",
+  "version": "11.1.0",
+  "cache": "daedalus-v11-1-20260806",
   "offline": true,
+  "modules": [
+    "comunicados",
+    "titulares",
+    "condolencias"
+  ],
   "changes": [
-    "Provincia a la derecha en formato 9:16",
-    "Icono geográfico ubicado después del nombre en 9:16",
-    "1:1 y 4:5 conservan provincia a la izquierda",
-    "Exportación de escritorio V10.5 conservada"
+    "Exportación de comunicados corregida",
+    "Comunicados descargan PNG directamente en escritorio",
+    "Comunicados usan Compartir en móvil para guardar en Fotos",
+    "Eliminados botones Actualizar y Descargar HTML",
+    "Nuevo exportador con estilos y fuentes incrustados"
   ]
 }
