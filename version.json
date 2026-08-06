@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "12.0.0",
-  "cache": "daedalus-v12-20260806",
+  "version": "13.0.0",
+  "cache": "daedalus-v13-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,11 +9,11 @@
     "condolencias"
   ],
   "changes": [
-    "Reconstrucción limpia del repositorio",
-    "Eliminados archivos duplicados y versiones huérfanas",
-    "Una sola copia de engine, parser, templateStore y exporter",
-    "Comunicados cargan el exportador V12 con ruta versionada",
-    "Escritorio descarga PNG y móvil utiliza Compartir",
-    "Biblioteca inicial de marcas conservada"
+    "Comunicados exportan siempre el original",
+    "Si el original mide menos de 1350 px se genera automáticamente una adaptación 1080 × 1350",
+    "La adaptación centra verticalmente el original sobre fondo azul institucional",
+    "Si el original mide 1350 px o más no se genera una segunda imagen",
+    "Escritorio descarga ZIP cuando existen dos imágenes",
+    "Móvil comparte una o dos imágenes en una sola operación"
   ]
 }

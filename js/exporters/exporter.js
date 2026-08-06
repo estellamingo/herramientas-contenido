@@ -1,4 +1,7 @@
 const DaedalusExporter=(()=>{
+const SOCIAL_HEIGHT=1350;
+const SOCIAL_BLUE="#293170";
+
 function setStatus(text,isError=false){
   const el=document.getElementById("startupStatus");
   if(!el)return;
@@ -20,7 +23,7 @@ function downloadBlob(blob,filename){
   document.body.appendChild(link);
   link.click();
   link.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),2000);
+  setTimeout(()=>URL.revokeObjectURL(url),2500);
 }
 
 function canvasToBlob(canvas){
@@ -57,7 +60,7 @@ function cssNumber(value,fallback=0){
   return Number.isFinite(parsed)?parsed:fallback;
 }
 
-function drawBackgroundLayers(ctx,artboard,width,height){
+function drawBackgroundLayers(ctx,width,height){
   ctx.fillStyle="#ffffff";
   ctx.fillRect(0,0,width,height);
 
@@ -159,7 +162,7 @@ function drawDomText(ctx,artboard){
   ctx.restore();
 }
 
-async function renderPNGBlob(template){
+async function renderOriginalCanvas(template){
   await document.fonts.ready;
   await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
 
@@ -175,39 +178,109 @@ async function renderPNGBlob(template){
   canvas.height=height;
   const ctx=canvas.getContext("2d");
 
-  drawBackgroundLayers(ctx,artboard,width,height);
+  drawBackgroundLayers(ctx,width,height);
 
   const templateImage=await svgElementToImage(templateSvg);
-  const svgHeight=cssNumber(templateSvg.getAttribute("height"),templateSvg.viewBox?.baseVal?.height||357.52);
+  const svgHeight=cssNumber(
+    templateSvg.getAttribute("height"),
+    templateSvg.viewBox?.baseVal?.height||357.52
+  );
+
   ctx.drawImage(templateImage,0,0,width,svgHeight);
-
-  // Volver a cubrir la extensión blanca y dibujar la barra dinámica.
-  drawBackgroundLayers(ctx,artboard,width,height);
-
-  // Redibujar la plantilla encima, solo en su área original.
-  ctx.drawImage(templateImage,0,0,width,svgHeight);
-
-  // El texto se dibuja directamente en canvas. No usa foreignObject,
-  // por lo que el canvas permanece exportable.
   drawDomText(ctx,artboard);
 
-  return await canvasToBlob(canvas);
+  return canvas;
 }
 
-async function shareOrDownload(blob,filename){
-  const file=new File([blob],filename,{type:"image/png"});
+function createSocialCanvas(originalCanvas){
+  if(originalCanvas.height>=SOCIAL_HEIGHT)return null;
+
+  const social=document.createElement("canvas");
+  social.width=1080;
+  social.height=SOCIAL_HEIGHT;
+  const ctx=social.getContext("2d");
+
+  ctx.fillStyle=SOCIAL_BLUE;
+  ctx.fillRect(0,0,social.width,social.height);
+
+  const y=Math.round((SOCIAL_HEIGHT-originalCanvas.height)/2);
+  ctx.drawImage(originalCanvas,0,y);
+
+  return social;
+}
+
+async function buildExportFiles(template){
+  const originalCanvas=await renderOriginalCanvas(template);
+  const originalBlob=await canvasToBlob(originalCanvas);
+  const date=new Date().toISOString().slice(0,10);
+
+  const files=[
+    new File(
+      [originalBlob],
+      `comunicado_original_${date}.png`,
+      {type:"image/png"}
+    )
+  ];
+
+  const socialCanvas=createSocialCanvas(originalCanvas);
+  if(socialCanvas){
+    const socialBlob=await canvasToBlob(socialCanvas);
+    files.push(
+      new File(
+        [socialBlob],
+        `comunicado_4x5_${date}.png`,
+        {type:"image/png"}
+      )
+    );
+  }
+
+  return {
+    files,
+    originalHeight:originalCanvas.height,
+    hasSocial:Boolean(socialCanvas)
+  };
+}
+
+async function downloadDesktop(files){
+  if(files.length===1){
+    downloadBlob(files[0],files[0].name);
+    return "Se descargó el comunicado original.";
+  }
+
+  if(typeof JSZip==="undefined"){
+    for(const file of files){
+      downloadBlob(file,file.name);
+      await new Promise(resolve=>setTimeout(resolve,350));
+    }
+    return "Se descargaron las dos imágenes por separado.";
+  }
+
+  const zip=new JSZip();
+  for(const file of files)zip.file(file.name,file);
+  const blob=await zip.generateAsync({type:"blob"});
+  downloadBlob(blob,`comunicado_original_y_4x5_${new Date().toISOString().slice(0,10)}.zip`);
+  return "Se descargó un ZIP con el original y la adaptación 4:5.";
+}
+
+async function shareOrDownload(files){
   const canShare=isMobile() &&
     typeof navigator.share==="function" &&
     typeof navigator.canShare==="function" &&
-    navigator.canShare({files:[file]});
+    navigator.canShare({files});
 
   if(canShare){
-    await navigator.share({files:[file],title:"Comunicado"});
-    return "Imagen lista para guardar o compartir.";
+    await navigator.share({
+      files,
+      title:files.length===2
+        ?"Comunicado original y adaptación 4:5"
+        :"Comunicado"
+    });
+    return files.length===2
+      ?"Las dos imágenes están listas para guardar o compartir."
+      :"La imagen está lista para guardar o compartir.";
   }
 
-  downloadBlob(blob,filename);
-  return "Imagen descargada correctamente.";
+  return downloadDesktop(files);
 }
 
 async function exportPNG(template,button){
@@ -216,14 +289,20 @@ async function exportPNG(template,button){
     button.disabled=true;
     button.textContent="Generando…";
   }
-  setStatus("Generando imagen…");
+  setStatus("Generando comunicado…");
 
   try{
-    const blob=await renderPNGBlob(template);
-    const message=await shareOrDownload(
-      blob,
-      `comunicado_${new Date().toISOString().slice(0,10)}.png`
-    );
+    const result=await buildExportFiles(template);
+
+    if(result.hasSocial){
+      setStatus(`Generando original (${result.originalHeight}px) y adaptación 4:5…`);
+    }else if(result.originalHeight===SOCIAL_HEIGHT){
+      setStatus("El original ya mide 1080 × 1350. No necesita adaptación.");
+    }else{
+      setStatus(`El original mide ${result.originalHeight}px de alto. Se exportará sin adaptación 4:5.`);
+    }
+
+    const message=await shareOrDownload(result.files);
     setStatus(message);
   }catch(error){
     console.error("Error al exportar comunicado:",error);
