@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "11.3.0",
-  "cache": "daedalus-v11-3-20260806",
+  "version": "12.0.0",
+  "cache": "daedalus-v12-20260806",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,10 +9,11 @@
     "condolencias"
   ],
   "changes": [
-    "Comunicados: eliminado el error Tainted canvas",
-    "Plantilla SVG rasterizada sin foreignObject",
-    "Texto dibujado directamente sobre canvas",
-    "Escritorio descarga PNG directamente",
-    "Móvil conserva Compartir para guardar en Fotos"
+    "Reconstrucción limpia del repositorio",
+    "Eliminados archivos duplicados y versiones huérfanas",
+    "Una sola copia de engine, parser, templateStore y exporter",
+    "Comunicados cargan el exportador V12 con ruta versionada",
+    "Escritorio descarga PNG y móvil utiliza Compartir",
+    "Biblioteca inicial de marcas conservada"
   ]
 }

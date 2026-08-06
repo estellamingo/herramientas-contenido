@@ -1,31 +1,56 @@
-DAEDALUS V11.3 — CORRECCIÓN DEL ERROR TAINTED CANVAS
+DAEDALUS V12 — INSTALACIÓN LIMPIA
 
-El mensaje de error confirmó que el exportador anterior contaminaba el canvas
-al convertir todo el HTML mediante foreignObject.
+Esta versión está preparada para reemplazar completamente el contenido local
+del repositorio. No contiene archivos duplicados como:
+- engine (1).js
+- parser (2).js
+- exporter (4).js
+- templateStore (3).js
 
-Esta versión:
-- rasteriza la plantilla SVG local;
-- dibuja el texto directamente sobre canvas;
-- evita el error “Tainted canvases may not be exported”.
+ANTES DE BORRAR:
+1. Copia fuera del repositorio la carpeta:
+   assets/marcas
+   si contiene logos adicionales que quieras conservar.
 
-INSTALACIÓN CON GITHUB DESKTOP
+REEMPLAZO LOCAL:
+1. Abre con GitHub Desktop:
+   Repository > Show in Finder
 
-1. Abre:
-   Documentos/Daedalus/herramientas-contenido
+2. Dentro de la carpeta local herramientas-contenido:
+   - selecciona todo;
+   - envíalo a la Papelera;
+   - NO borres la carpeta herramientas-contenido ni la carpeta oculta .git.
 
-2. Arrastra dentro el contenido de esta actualización.
-   Conserva la carpeta js y el archivo dentro de exporters.
+3. Abre este ZIP y copia TODO su contenido dentro de:
+   herramientas-contenido
 
-3. Reemplaza:
-   - js/exporters/exporter.js
-   - service-worker.js
-   - version.json
+4. Si guardaste logos adicionales:
+   - cópialos dentro de assets/marcas;
+   - actualiza la biblioteca desde Daedalus siguiendo tu flujo habitual.
 
-4. En GitHub Desktop escribe:
-   Daedalus V11.3 - corregir tainted canvas
+5. Vuelve a GitHub Desktop.
+   Deberá mostrar archivos eliminados, nuevos y modificados.
 
-5. Commit to main.
-6. Push origin.
-7. Espera GitHub Pages.
-8. Abre:
-   comunicado.html?v=1130
+6. Summary:
+   Daedalus V12 - reconstrucción limpia
+
+7. Pulsa:
+   Commit to main
+   y después:
+   Push origin
+
+8. Espera a que GitHub Pages termine el despliegue.
+
+9. Comprueba:
+   https://estellamingo.github.io/herramientas-contenido/version.json?v=1200
+
+   Debe mostrar:
+   "version": "12.0.0"
+
+10. Prueba Comunicados:
+    https://estellamingo.github.io/herramientas-contenido/comunicado.html?v=1200
+
+IMPORTANTE:
+- No arrastres la carpeta Daedalus_V12 como una subcarpeta.
+- Copia los archivos que están dentro directamente a la raíz del repositorio.
+- La carpeta .git es oculta y debe conservarse.
