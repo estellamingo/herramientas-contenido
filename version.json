@@ -1,6 +1,6 @@
 {
   "app": "Daedalus",
-  "version": "14.4.2-test",
+  "version": "14.4.3-test",
   "cache": "disabled-in-test-build",
   "offline": true,
   "modules": [
@@ -9,12 +9,11 @@
     "condolencias"
   ],
   "changes": [
-    "TEST SAFE: base exacta V14.4.1 de pruebas",
-    "Comunicados: desactiva el text autosizing de iOS/Android dentro del artboard",
-    "Comunicados: ancho lógico bloqueado a 1080 px en todos los dispositivos",
-    "Comunicados: misma tipografía, wrapping y altura dinámica en móvil y escritorio",
-    "Conserva hotfix de coordenadas de exportación móvil y parser de viñetas de V14.4.1",
-    "Service Worker/PWA sigue desactivado SOLO en pruebas",
-    "Titulares y Condolencias sin cambios respecto de V14.3"
+    "Base: V14.4.2 con render consistente de Comunicados",
+    "Condolencias: corrige cálculo de altura en móvil usando coordenadas lógicas no escaladas",
+    "Condolencias: el pie Descanse en paz vuelve a colocarse después del contenido",
+    "Condolencias: ancho, tipografía, saltos de línea y altura final independientes del tamaño del preview",
+    "Comunicados y Titulares sin cambios respecto de V14.4.2",
+    "Service Worker/PWA permanece desactivado SOLO en el repositorio de pruebas"
   ]
 }

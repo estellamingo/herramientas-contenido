@@ -144,7 +144,10 @@ function render(){
 }
 
 function layout(){
-  const contentHeight=Math.ceil(contentRender.getBoundingClientRect().height);
+  // IMPORTANTE: medir en coordenadas lógicas del documento, no en píxeles
+  // visuales del preview. getBoundingClientRect() incluye el transform:scale()
+  // aplicado en móvil y hacía que el pie subiera sobre el texto.
+  const contentHeight=Math.ceil(contentRender.scrollHeight);
   const contentBottom=CONTENT_TOP+contentHeight;
 
   // El pie acompaña al contenido en ambos sentidos:
