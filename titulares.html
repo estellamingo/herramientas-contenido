@@ -662,10 +662,12 @@ counts();syncSliders();syncCaseSliders();loadBrandCatalog();initializeFontsAndRe
 </script>
 
 <script>
+// TEST BUILD: Service Worker desactivado para evitar interferencia de caché.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
-  });
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    const here = location.origin + location.pathname.replace(/[^/]+$/, '');
+    regs.forEach(reg => { if (reg.scope === here) reg.unregister(); });
+  }).catch(()=>{});
 }
 </script>
 

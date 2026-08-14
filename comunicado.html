@@ -34,6 +34,26 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 
 
 <style>
+/* Render Consistency 14.4.2
+   El comunicado siempre se compone sobre un lienzo lógico de 1080 px.
+   iOS/Android no pueden aplicar text autosizing dentro del arte, porque eso
+   cambia saltos de línea, altura dinámica y por tanto el PNG final. */
+html, body{
+  -webkit-text-size-adjust:none !important;
+  text-size-adjust:none !important;
+}
+#artboard, #artboard *, #textLayer, #textLayer *{
+  -webkit-text-size-adjust:none !important;
+  text-size-adjust:none !important;
+}
+#artboard{
+  width:1080px;
+  min-width:1080px;
+  max-width:1080px;
+}
+</style>
+
+<style>
 /* Responsive Cleanup 14.2 */
 @media(max-width:900px){
   html,body{overflow-x:hidden}
@@ -80,7 +100,7 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 <div id="templateLayer" class="template-layer"></div><div id="extensionLayer" class="extension-layer"></div><div id="barExtension" class="bar-extension"></div>
 <div id="textLayer" class="text-layer"><div id="bodyText"></div><div id="signatureText"></div><div id="dateText"></div></div>
 </div></div></section></main>
-<script src="assets/vendor/jszip.min.js?v=1300"></script><script src="js/core/templateStore.js?v=1300"></script><script src="js/core/parser.js?v=1300"></script><script src="js/core/engine.js?v=1300"></script><script src="js/exporters/exporter.js?v=1310"></script><script src="js/app.js?v=1300"></script>
+<script src="assets/vendor/jszip.min.js?v=1300"></script><script src="js/core/templateStore.js?v=1300"></script><script src="js/core/parser.js?v=1442"></script><script src="js/core/engine.js?v=1300"></script><script src="js/exporters/exporter.js?v=1442"></script><script src="js/app.js?v=1300"></script>
 <script>
 (function(){
   const wrap=document.querySelector('.artboard-wrap');
@@ -101,10 +121,12 @@ body{background:var(--suite-bg);color:var(--suite-text);font-family:Montserrat,R
 })();
 </script>
 <script>
+// TEST BUILD: no registrar Service Worker. Evita caché/PWA mientras validamos móvil.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js').catch(console.error);
-  });
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    const here = location.origin + location.pathname.replace(/[^/]+$/, '');
+    regs.forEach(reg => { if (reg.scope === here) reg.unregister(); });
+  }).catch(()=>{});
 }
 </script>
 

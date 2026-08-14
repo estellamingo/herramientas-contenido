@@ -138,6 +138,13 @@ function drawDomText(ctx,artboard){
   const layer=document.getElementById("textLayer");
   if(!layer)return;
 
+  // En móvil el artboard se muestra escalado con CSS. getClientRects() devuelve
+  // coordenadas visuales escaladas; normalizamos de vuelta al sistema 1080 px.
+  const naturalWidth=artboard.offsetWidth||1080;
+  const naturalHeight=artboard.offsetHeight||cssNumber(getComputedStyle(artboard).height,artboard.scrollHeight);
+  const scaleX=(artRect.width/naturalWidth)||1;
+  const scaleY=(artRect.height/naturalHeight)||scaleX||1;
+
   ctx.save();
   ctx.textBaseline="alphabetic";
 
@@ -160,8 +167,8 @@ function drawDomText(ctx,artboard){
       const rects=[...item.range.getClientRects()];
       for(const rect of rects){
         if(rect.width<=0 || rect.height<=0)continue;
-        const x=rect.left-artRect.left;
-        const top=rect.top-artRect.top;
+        const x=(rect.left-artRect.left)/scaleX;
+        const top=(rect.top-artRect.top)/scaleY;
         const baseline=top+(lineHeight-fontSize)/2+fontSize*.82;
         ctx.fillText(item.text,x,baseline);
       }

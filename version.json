@@ -1,7 +1,7 @@
 {
   "app": "Daedalus",
-  "version": "14.3.0",
-  "cache": "daedalus-v14-2-responsive-20260806",
+  "version": "14.4.2-test",
+  "cache": "disabled-in-test-build",
   "offline": true,
   "modules": [
     "comunicados",
@@ -9,11 +9,12 @@
     "condolencias"
   ],
   "changes": [
-    "Responsive Cleanup general para teléfono y tablet",
-    "Condolencias: preview móvil usa viewport escalado sin recorte horizontal",
-    "Condolencias: editor y controles optimizados para touch",
-    "Comunicados: preview ajustado al ancho real disponible en móvil",
-    "Titulares: workspace, canvas y controles adaptados a pantallas pequeñas",
-    "No se modificó la lógica de exportación de los tres módulos"
+    "TEST SAFE: base exacta V14.4.1 de pruebas",
+    "Comunicados: desactiva el text autosizing de iOS/Android dentro del artboard",
+    "Comunicados: ancho lógico bloqueado a 1080 px en todos los dispositivos",
+    "Comunicados: misma tipografía, wrapping y altura dinámica en móvil y escritorio",
+    "Conserva hotfix de coordenadas de exportación móvil y parser de viñetas de V14.4.1",
+    "Service Worker/PWA sigue desactivado SOLO en pruebas",
+    "Titulares y Condolencias sin cambios respecto de V14.3"
   ]
 }
