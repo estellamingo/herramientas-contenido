@@ -1,6 +1,6 @@
 const DaedalusExporter=(()=>{
 const SOCIAL_HEIGHT=1350;
-const SOCIAL_BLUE="#293170";
+const SOCIAL_BLUE="#1E3781";
 
 function setStatus(text,isError=false){
   const el=document.getElementById("startupStatus");

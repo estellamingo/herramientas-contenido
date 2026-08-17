@@ -44,7 +44,7 @@ input[type="text"],input[type="date"]{
 .preview-viewport{position:relative;flex:0 0 auto;overflow:visible}
 .preview-shell{position:absolute;left:0;top:0;width:1080px;transform-origin:top left}
 .artboard{
-  position:relative;width:1080px;min-height:760px;background:#fff;color:#111;overflow:hidden;
+  position:relative;width:1080px;background:#fff;color:#111;overflow:hidden;
   box-shadow:0 0 0 1px rgba(255,255,255,.07);
 }
 .static-header{position:absolute;left:0;top:0;width:1080px;height:210px;overflow:hidden;pointer-events:none}
@@ -59,8 +59,9 @@ input[type="text"],input[type="date"]{
   position:absolute;left:50px;right:50px;top:230px;
   text-align:center;font-family:Montserrat,Arial,sans-serif;color:#111;letter-spacing:0;
 }
-.content-render p{margin:0 0 24px;white-space:pre-wrap}
-.content-render p:last-child{margin-bottom:0}
+.content-block{margin:0 0 32px;display:flex;flex-direction:column;align-items:center}
+.content-block:last-child{margin-bottom:0}
+.content-line{display:inline-block;white-space:pre;text-align:center}
 .content-render .regular{font-size:24px;font-weight:400;line-height:34px}
 .content-render .bold{font-size:24px;font-weight:700;line-height:34px}
 .content-render .black{font-size:40px;font-family:'Montserrat Condolencias Black',Montserrat,Arial,sans-serif;font-weight:900;line-height:48px}
@@ -133,16 +134,17 @@ input[type="text"],input[type="date"]{
     <div id="previewViewport" class="preview-viewport">
       <div id="previewShell" class="preview-shell">
         <div id="artboard" class="artboard">
-        <div class="static-header"><img src="assets/templates/condolencias-base.svg?v=1443" alt=""></div>
+        <div class="static-header"><img src="assets/templates/condolencias-base.svg?v=1455" alt=""></div>
         <div id="dateRender" class="date-render"></div>
         <div id="contentRender" class="content-render"></div>
-        <div id="footer" class="static-footer"><img src="assets/templates/condolencias-base.svg?v=1443" alt=""></div>
+        <div id="footer" class="static-footer"><img src="assets/templates/condolencias-base.svg?v=1455" alt=""></div>
         </div>
       </div>
     </div>
   </section>
 </main>
 
-<script src="js/condolencias.js?v=1443"></script>
+<script src="assets/vendor/jszip.min.js"></script>
+<script src="js/condolencias.js?v=1455"></script>
 </body>
 </html>
